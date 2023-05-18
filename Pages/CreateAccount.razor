@@ -1,0 +1,86 @@
+﻿@page "/createaccount"
+
+@inject NavigationManager Navigation
+
+<div class="text-center">
+    <h1>Create Account</h1>
+    <div
+        class = "mx-auto"
+        style = "max-width: 430px; width: 80%"
+    >
+        <div class="input-group mb-3">
+            <span
+                class = "input-group-text"
+                style = "width: 130px"
+            >
+                Username
+            </span>
+            <input
+                type        = "text"
+                class       = "form-control"
+                placeholder = "Chandra4"
+                @bind       = "username"
+            />
+        </div>
+        <div class="input-group mb-3">
+            <span
+                class = "input-group-text"
+                style = "width: 130px"
+            >
+                Password
+            </span>
+            <input
+                type        = "text"
+                class       = "form-control"
+                placeholder = "DontForgetMe"
+                @bind       = "password"
+            />
+        </div>
+        <div class="input-group mb-1">
+            <span
+                class = "input-group-text"
+                style = "width: 130px"
+            >
+                Confirm Pass
+            </span>
+            <input
+                type        = "text"
+                class       = "form-control"
+                placeholder = "Confirm Pass"
+                @bind       = "passConfirm"
+            />
+        </div>
+        <div 
+            class = "text-start mb-3"
+            style = "font-size: 0.85em"
+        >
+            Have an Account?
+            <a href="login">
+                Login
+            </a>
+        </div>
+        <div>
+            <button
+                type     = "button"
+                class    = "btn btn-primary"
+                @onclick = "CreateUserAccount"
+            >
+                Create Account
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    string username    = "";
+    string password    = "";
+    string passConfirm = "";
+
+    private void CreateUserAccount() {
+        Console.WriteLine(username);
+        Console.WriteLine(password);
+        Navigation.NavigateTo("collection");
+        
+    }
+}

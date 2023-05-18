@@ -1,0 +1,71 @@
+﻿@page "/login"
+
+@inject NavigationManager Navigation
+
+<div class="text-center">
+    <h1>Login</h1>
+    <div
+        class = "mx-auto"
+        style = "max-width: 400px; width: 80%"
+    >
+        <div class="input-group mb-3">
+            <span
+                class = "input-group-text"
+                style = "width: 100px"
+            >
+                Username
+            </span>
+            <input
+                type        = "text"
+                class       = "form-control"
+                placeholder = "Chandra4"
+                @bind       = "username"
+            />
+        </div>
+        <div class="input-group mb-1">
+            <span
+                class = "input-group-text"
+                style = "width: 100px"
+            >
+                Password
+            </span>
+            <input
+                type        = "text"
+                class       = "form-control"
+                placeholder = "badPass123"
+                @bind       = "password"
+            />
+        </div>
+        <div 
+            class = "text-start mb-3"
+            style = "font-size: 0.85em"
+        >
+            New?
+            <a href="createaccount">
+                Create an Account
+            </a>
+        </div>
+        <div>
+            <button
+                type     = "button"
+                class    = "btn btn-primary"
+                @onclick = "LoginUser"
+            >
+                Login
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    string username = "";
+    string password = "";
+
+    private void LoginUser() {
+        Console.WriteLine(username);
+        Console.WriteLine(password);
+        Navigation.NavigateTo("collection");
+        
+    }
+}
