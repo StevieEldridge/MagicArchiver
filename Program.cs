@@ -18,6 +18,7 @@ builder.Services.AddScoped(sp => new HttpClient {
 });
 
 builder.Services.AddScoped<IPocketBase, PocketBase>();
+builder.Services.AddSingleton<IGlobalState, GlobalState>();
 
 
 
