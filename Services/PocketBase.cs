@@ -12,8 +12,8 @@ public class PocketBase: IPocketBase {
 
   public async Task<HttpResponseMessage> CreateAccount(string user, string pass, string passConf) {
     var body = new {
-      username = user,
-      password = pass,
+      username        = user,
+      password        = pass,
       passwordConfirm = passConf
     };
 
