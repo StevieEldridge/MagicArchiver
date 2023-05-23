@@ -1,6 +1,8 @@
 ﻿@page "/login"
+@using MagicArchiver.Pages.Services
 
 @inject NavigationManager Navigation
+@inject IPocketBase       PocketBase
 
 <div class="text-center">
     <h1>Login</h1>
@@ -55,17 +57,39 @@
             </button>
         </div>
     </div>
+    @if (error != null) {
+        <div
+            class = "alert alert-warning mt-3"
+            role  = "alert"
+        >
+            @error
+        </div>
+    }
 </div>
 
 
 @code {
-    string username = "";
-    string password = "";
+    string  username = "";
+    string  password = "";
+    string? error    = null;
+    
+    
+    async private void LoginUser() {
+        HttpResponseMessage response = await PocketBase.Login(
+            username,
+            password
+        );
 
-    private void LoginUser() {
-        Console.WriteLine(username);
-        Console.WriteLine(password);
-        Navigation.NavigateTo("collection");
-        
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode) {
+            Console.WriteLine(responseBody);
+            Navigation.NavigateTo("collection");
+        }
+        else {
+            Console.WriteLine("ERROR");
+            error = responseBody;
+            StateHasChanged();
+        }
     }
 }
