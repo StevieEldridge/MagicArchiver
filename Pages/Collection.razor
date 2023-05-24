@@ -10,15 +10,15 @@
 
 
 <h1>
-    Collection
+  Collection
 </h1>
 
 
 @code {
-    protected override void OnInitialized() {
-        // Navigates the user to the login screen if they aren't authenticated
-        if (GlobalState.GetToken() == null) {
-            Navigation.NavigateTo("login");
-        }
+  protected override void OnInitialized() {
+    // Navigates the user to the login screen if they aren't authenticated
+    if (GlobalState.GetToken() == null) {
+      Navigation.NavigateTo("login");
     }
+  }
 }
