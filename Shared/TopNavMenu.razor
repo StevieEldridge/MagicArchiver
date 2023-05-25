@@ -1,0 +1,60 @@
+﻿@using MagicArchiver.Pages.Services
+
+@inject IGlobalState GlobalState
+
+<div 
+  class = "navbar navbar-expand-md navbar-light navbar-fixed-top navbar-dark"
+  style = "background: #06173d"
+  >
+  <div class="container-fluid">
+    <button 
+      title    = "Navigation menu" 
+      class    = "navbar-toggler" 
+      @onclick = "ToggleNavMenu"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div 
+      class    = "@NavMenuCssClass collapse navbar-collapse"
+      @onclick = "ToggleNavMenu"
+    >
+      <ul class="nav navbar-nav">
+        @if (GlobalState.GetToken() == null) {
+          <li class="nav-item">
+            <NavLink class="nav-link" href="login">
+              Login
+            </NavLink>
+          </li>
+          <li class="nav-item">
+            <NavLink class="nav-link" href="createaccount">
+              Create Account
+            </NavLink>
+          </li>
+        }
+        else {
+          <li class="nav-item">
+            <NavLink class="nav-link" href="addcards">
+              Add Cards
+            </NavLink>
+          </li>
+          <li class="nav-item">
+            <NavLink class="nav-link" href="collection">
+              Collection
+            </NavLink>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+@code {
+  private bool collapseNavMenu = true;
+
+  private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+  private void ToggleNavMenu() {
+    collapseNavMenu = !collapseNavMenu;
+  }
+}
