@@ -1,7 +1,8 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MagicArchiver;
-using MagicArchiver.Pages.Services;
+using MagicArchiver.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,6 +18,7 @@ builder.Services.AddScoped(sp => new HttpClient {
   BaseAddress = new Uri(connStr ?? "http://localhost:8090/api/")
 });
 
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddScoped<IPocketBase, PocketBase>();
 builder.Services.AddSingleton<IGlobalState, GlobalState>();
 

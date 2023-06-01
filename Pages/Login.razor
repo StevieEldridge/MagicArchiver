@@ -1,5 +1,5 @@
 ﻿@page "/login"
-@using MagicArchiver.Pages.Services
+@using MagicArchiver.Services
 @using MagicArchiver.Models
 @using System.Text.Json
 
@@ -7,7 +7,7 @@
 @inject IPocketBase       PocketBase
 @inject IGlobalState      GlobalState
 
-<div class="text-center">
+<div class="text-center m-5">
   <h1>Login</h1>
   <div
     class = "mx-auto"
@@ -77,7 +77,7 @@
   string? error    = null;
 
 
-  async private void LoginUser() {
+  private async void LoginUser() {
     HttpResponseMessage response = await PocketBase.Login(
       username,
       password

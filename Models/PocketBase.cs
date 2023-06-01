@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web.Virtualization;
-
-namespace MagicArchiver.Models;
+﻿namespace MagicArchiver.Models;
 
 public record struct LoginRecord {
   public string   id              { get; init; }

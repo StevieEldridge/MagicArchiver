@@ -1,4 +1,4 @@
-﻿namespace MagicArchiver.Pages.Services; 
+﻿namespace MagicArchiver.Services; 
 
 public interface IPocketBase {
   Task<HttpResponseMessage> CreateAccount (string user, string pass, string passConf);

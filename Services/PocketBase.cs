@@ -1,7 +1,7 @@
 ﻿using System.Net.Cache;
 using System.Text;
 using System.Text.Json;
-using MagicArchiver.Pages.Services;
+using MagicArchiver.Services;
 
 public class PocketBase: IPocketBase {
   private readonly HttpClient _httpClient;
