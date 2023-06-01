@@ -15,10 +15,6 @@
     text-align:    center;
 }
 
-.nav-item:first-of-type {
-    margin-left: 8px;
-}
-
 .nav-item:last-of-type {
     margin-right: 8px;
 }

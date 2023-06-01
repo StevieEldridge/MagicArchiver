@@ -10,7 +10,7 @@
   style = "background: #06173d"
   >
   <div class="container-fluid">
-    <div class="px-3">
+    <div class="px-3" style="width: 250px;">
       <span style="font-size: 1.5em; color: #EEEEEE;">
         Magic Archiver
       </span>
@@ -65,7 +65,6 @@
 
 @code {
   private bool collapseNavMenu = true;
-  private bool isLoggedIn      = false;
 
   private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -79,9 +78,6 @@
   }
   
   protected override void OnInitialized() {
-    if (GlobalState.GetToken() != null) {
-      isLoggedIn = true;
-    }
     GlobalState.OnStateChange += StateHasChanged;
   }
 

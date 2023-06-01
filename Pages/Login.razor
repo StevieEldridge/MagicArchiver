@@ -86,7 +86,6 @@
     string responseBody = await response.Content.ReadAsStringAsync();
 
     if (response.IsSuccessStatusCode) {
-      Console.WriteLine(responseBody);
       string token = JsonSerializer.Deserialize<LoginResponse>(responseBody).token;
       GlobalState.SetToken(token);
       Navigation.NavigateTo("collection");

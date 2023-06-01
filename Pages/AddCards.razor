@@ -1,17 +1,131 @@
 ﻿@page "/addcards"
 
-@using MagicArchiver.Pages.Services
+@using MagicArchiver.Services
+@using MagicArchiver.Models
 
 @inject NavigationManager Navigation
 @inject IGlobalState      GlobalState
+@inject ILogger<AddCards> Logger
 
 
-<h1>
-  Add Cards
-</h1>
+<!-- Sidebar -->
+<div class="nav-scrollable sidebar py-4">
+  <div class="nav-item my-2 px-3">
+    <a
+      class    = "btn @(NavMenuActive(AddCardMethod.SetNum))"
+      @onclick = "@(() => cardMethod = AddCardMethod.SetNum)"
+    >
+      Set Number
+    </a>
+  </div>
+  <div class="nav-item my-2 px-3">
+    <a
+      class    = "btn @(NavMenuActive(AddCardMethod.SetName))"
+      @onclick = "@(() => cardMethod = AddCardMethod.SetName)"
+    >
+      Set Name
+    </a>
+  </div>
+  <div class="nav-item my-2 px-3">
+    <a
+      class    = "btn @(NavMenuActive(AddCardMethod.CardName))"
+      @onclick = "@(() => cardMethod = AddCardMethod.CardName)"
+    >
+      Card Name
+    </a>
+  </div>
+</div>
+
+<!-- Page Content -->
+<div class="page-content">
+  <div
+    class="text-center m-5"
+    @onkeydown="HandleKeyDown">
+    @if (cardMethod == AddCardMethod.CardName) {
+      <h2>Add By Card Name</h2>
+      <p>
+        Add a card by the set number followed by the first three characters of the card name.
+        Example: to add Demonic Tutor from the Ultimate Masters set type "093dem". Hit "Enter" to
+        add the card or hit "Alt" to add the card as a foil.
+      </p>
+    }
+    else if (cardMethod == AddCardMethod.SetName) {
+      <h2>Add By Set Name</h2>
+      <p>
+        Coming Soon! Not Implemented Yet
+      </p>
+    }
+    else {
+      <h2>Add By Total Set Number</h2>
+      <p>
+        Add a card by the set number followed by the total cards in the set. Example: to add Demonic
+        Tutor from the Ultimate Masters set type "093254". Hit "Enter" to add the card or hit "Alt" to
+        add the card as a foil.
+      </p>
+    }
+    <div
+      class="mx-auto"
+      style="max-width: 400px; width: 80%">
+      <div class="input-group mb-3">
+        <span
+          class="input-group-text"
+          style="width: 100px">
+          Card Id
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="@GetInputPlaceHolder()"
+          @bind="idText"/>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 @code {
+  string cardId = "";
+  private AddCardMethod cardMethod      =  AddCardMethod.SetNum;
+  private bool          collapseNavMenu =  false;
+  private string        idText          =  "";
+  
+  private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+  private string NavMenuActive(AddCardMethod method) {
+    return method == cardMethod ? "active" : "";
+  }
+
+  private void SetCardMethod(AddCardMethod method) {
+    cardMethod = method;
+  }
+
+  private void ToggleNavMenu() {
+    collapseNavMenu = !collapseNavMenu;
+  }
+
+  private void HandleKeyDown(KeyboardEventArgs e) {
+    if (e.Key == "Enter") { 
+      
+    }
+    else if (e.Key == "Shift") { 
+      
+    }
+  }
+
+  private string GetInputPlaceHolder() {
+    switch (cardMethod) {
+      case AddCardMethod.CardName:
+        return "079Tri";
+      case AddCardMethod.SetName:
+        return "153";
+      case AddCardMethod.SetNum:
+        return "153281";
+      default:
+        Logger.LogError("ERROR: Default Triggered");
+        return "";
+    }
+  }
+  
   protected override void OnInitialized() {
     // Navigates the user to the login screen if they aren't authenticated
     if (GlobalState.GetToken() == null) {
