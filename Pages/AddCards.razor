@@ -5,6 +5,7 @@
 
 @inject NavigationManager Navigation
 @inject IGlobalState      GlobalState
+@inject IPocketBase       PocketBase
 @inject ILogger<AddCards> Logger
 
 
@@ -20,10 +21,10 @@
   </div>
   <div class="nav-item my-2 px-3">
     <a
-      class    = "btn @(NavMenuActive(AddCardMethod.SetName))"
-      @onclick = "@(() => cardMethod = AddCardMethod.SetName)"
+      class    = "btn @(NavMenuActive(AddCardMethod.SetAbr))"
+      @onclick = "@(() => cardMethod = AddCardMethod.SetAbr)"
     >
-      Set Name
+      Set Abbr
     </a>
   </div>
   <div class="nav-item my-2 px-3">
@@ -49,10 +50,12 @@
         add the card or hit "Alt" to add the card as a foil.
       </p>
     }
-    else if (cardMethod == AddCardMethod.SetName) {
-      <h2>Add By Set Name</h2>
+    else if (cardMethod == AddCardMethod.SetAbr) {
+      <h2>Add By Set Abbreviation</h2>
       <p>
-        Coming Soon! Not Implemented Yet
+        Add a card by the set number followed by the set abbreviation code. Example: to add Demonic
+        Tutor from the Ultimate Masters set type "093uma". Hit "Enter" to add the card or hit "Alt" to
+        add the card as a foil.
       </p>
     }
     else {
@@ -73,10 +76,12 @@
           Card Id
         </span>
         <input
-          type="text"
-          class="form-control"
-          placeholder="@GetInputPlaceHolder()"
-          @bind="idText"/>
+          type        = "text"
+          class       = "form-control"
+          placeholder = "@GetInputPlaceHolder()"
+          @bind       = "cardId"
+          @bind:event = "oninput"
+        />
       </div>
     </div>
   </div>
@@ -84,10 +89,9 @@
 
 
 @code {
-  string cardId = "";
-  private AddCardMethod cardMethod      =  AddCardMethod.SetNum;
-  private bool          collapseNavMenu =  false;
-  private string        idText          =  "";
+  private string        cardId          = "";
+  private AddCardMethod cardMethod      = AddCardMethod.SetNum;
+  private bool          collapseNavMenu = false;
   
   private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -103,23 +107,40 @@
     collapseNavMenu = !collapseNavMenu;
   }
 
-  private void HandleKeyDown(KeyboardEventArgs e) {
-    if (e.Key == "Enter") { 
-      
+  private async Task HandleKeyDown(KeyboardEventArgs e) {
+    if (e.Key == "Enter") {
+      await AddCard(false);
     }
-    else if (e.Key == "Shift") { 
-      
+    else if (e.Key == "Alt") { 
+      await AddCard(true);
+    }
+  }
+
+  private async Task AddCard(bool isFoil) {
+    switch (cardMethod) {
+      case AddCardMethod.CardName:
+        Logger.LogError("ERROR: Not implemented yet");
+        break;
+      case AddCardMethod.SetAbr:
+        await PocketBase.AddCardBySetAbr(cardId, isFoil);
+        break;
+      case AddCardMethod.SetNum:
+        Logger.LogError("ERROR: Not implemented yet");
+        break;
+      default:
+        Logger.LogError("ERROR: Default Triggered");
+        break;
     }
   }
 
   private string GetInputPlaceHolder() {
     switch (cardMethod) {
       case AddCardMethod.CardName:
-        return "079Tri";
-      case AddCardMethod.SetName:
-        return "153";
+        return "093dem";
+      case AddCardMethod.SetAbr:
+        return "093uma";
       case AddCardMethod.SetNum:
-        return "153281";
+        return "093254";
       default:
         Logger.LogError("ERROR: Default Triggered");
         return "";

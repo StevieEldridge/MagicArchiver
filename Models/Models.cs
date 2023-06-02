@@ -2,6 +2,6 @@
 
 public enum AddCardMethod {
   SetNum   = 1,
-  SetName  = 2,
+  SetAbr   = 2,
   CardName = 3
 }

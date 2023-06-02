@@ -1,7 +1,9 @@
 ﻿@page "/login"
+
 @using MagicArchiver.Services
 @using MagicArchiver.Models
 @using System.Text.Json
+@using FluentResults
 
 @inject NavigationManager Navigation
 @inject IPocketBase       PocketBase
@@ -78,21 +80,19 @@
 
 
   private async void LoginUser() {
-    HttpResponseMessage response = await PocketBase.Login(
+    Result<LoginResponse> response = await PocketBase.Login(
       username,
       password
     );
 
-    string responseBody = await response.Content.ReadAsStringAsync();
-
-    if (response.IsSuccessStatusCode) {
-      string token = JsonSerializer.Deserialize<LoginResponse>(responseBody).token;
-      GlobalState.SetToken(token);
+    if (response.IsSuccess) {
+      GlobalState.SetToken(response.Value.token);
       Navigation.NavigateTo("collection");
     }
     else {
       Console.WriteLine("ERROR");
-      error = responseBody;
+      // TODO: Print all errors
+      error = response.Errors.First().ToString();
       StateHasChanged();
     }
   }

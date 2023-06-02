@@ -1,8 +1,12 @@
 ﻿@page "/createaccount"
+
+@using FluentResults
 @using MagicArchiver.Services
+@using MagicArchiver.Models
 
 @inject NavigationManager Navigation
 @inject IPocketBase       PocketBase
+@inject IGlobalState      GlobalState
 
 <div class="text-center m-5">
   <h1>Create Account</h1>
@@ -90,21 +94,20 @@
 
 
   async private void CreateUserAccount() {
-    HttpResponseMessage response = await PocketBase.CreateAccount (
+    Result<LoginResponse> response = await PocketBase.CreateAccount (
       username,
       password,
       passConfirm
     );
 
-    string responseBody = await response.Content.ReadAsStringAsync();
-
-    if (response.IsSuccessStatusCode) {
-      Console.WriteLine(responseBody);
+    if (response.IsSuccess) {
+      GlobalState.SetToken(response.Value.token);
       Navigation.NavigateTo("collection");
     }
     else {
       Console.WriteLine("ERROR");
-      error = responseBody;
+      // TODO: Print all errors
+      error = response.Errors.First().ToString();
       StateHasChanged();
     }
   }

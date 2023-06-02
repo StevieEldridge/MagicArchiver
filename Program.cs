@@ -19,8 +19,8 @@ builder.Services.AddScoped(sp => new HttpClient {
 });
 
 builder.Services.AddBlazoredLocalStorageAsSingleton();
-builder.Services.AddScoped<IPocketBase, PocketBase>();
 builder.Services.AddSingleton<IGlobalState, GlobalState>();
+builder.Services.AddScoped<IPocketBase, PocketBase>();
 
 
 

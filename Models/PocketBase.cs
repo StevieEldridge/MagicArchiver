@@ -31,7 +31,7 @@ public record struct Collection {
 }
 
 public record struct Card {
-  public int      id                      { get; init; }
+  public string   id                      { get; init; }
   public string   collectionId            { get; init; }
   public string   collectionName          { get; init; }
   public string?  artist                  { get; init; }
@@ -104,7 +104,7 @@ public record struct Card {
 }
 
 public record struct Token {
-  public int     id            { get; init; }
+  public string  id            { get; init; }
   public string? colorIdentity { get; init; }
   public string? colors        { get; init; }
   public string? faceName      { get; init; }
@@ -141,14 +141,14 @@ public record struct Token {
 }
 
 public record struct Legality {
-  public int     id     { get; init; }
+  public string  id     { get; init; }
   public string? format { get; init; }
   public string? status { get; init; }
   public string  uuid   { get; init; }
 }
 
 public record struct Set {
-  public int       id               { get; init; }
+  public string    id               { get; init; }
   public int?      baseSetSize      { get; init; }
   public string?   block            { get; init; }
   public string?   booster          { get; init; }
