@@ -94,14 +94,14 @@
 
 
   async private void CreateUserAccount() {
-    Result<LoginResponse> response = await PocketBase.CreateAccount (
+    Result<LoginDetails> response = await PocketBase.CreateAccount (
       username,
       password,
       passConfirm
     );
 
     if (response.IsSuccess) {
-      GlobalState.SetToken(response.Value.token);
+      GlobalState.SetLoginDetails(response.Value);
       Navigation.NavigateTo("collection");
     }
     else {

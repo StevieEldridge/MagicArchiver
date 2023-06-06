@@ -1,6 +1,8 @@
-﻿using Blazored.LocalStorage;
+﻿namespace MagicArchiver.Services;
 
-namespace MagicArchiver.Services;
+using Blazored.LocalStorage;
+using MagicArchiver.Models;
+
 
 public class GlobalState: IGlobalState {
   private readonly ISyncLocalStorageService _localStorage;
@@ -14,18 +16,17 @@ public class GlobalState: IGlobalState {
   /// </summary>
   public event Action? OnStateChange;
 
-  public string? GetToken() {
-    string jwtToken = _localStorage.GetItem<string>("jwtToken");
-    return jwtToken == "" ? null : jwtToken;
+  public LoginDetails? GetLoginDetails() {
+    return _localStorage.GetItem<LoginDetails?>("LoginDetails");
   }
 
-  public void SetToken(string token) {
-    _localStorage.SetItem("jwtToken", token);
+  public void SetLoginDetails(LoginDetails loginDetails) {
+    _localStorage.SetItem<LoginDetails>("LoginDetails", loginDetails);
     NotifyStateChanged();
   }
 
-  public void ClearToken() {
-    _localStorage.RemoveItem("jwtToken");
+  public void ClearLoginDetails() {
+    _localStorage.RemoveItem("LoginDetails");
     NotifyStateChanged();
   }
 

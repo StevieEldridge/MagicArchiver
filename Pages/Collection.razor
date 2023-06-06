@@ -15,7 +15,7 @@
 @code {
   protected override void OnInitialized() {
     // Navigates the user to the login screen if they aren't authenticated
-    if (GlobalState.GetToken() == null) {
+    if (GlobalState.GetLoginDetails() == null) {
       Navigation.NavigateTo("login");
     }
   }

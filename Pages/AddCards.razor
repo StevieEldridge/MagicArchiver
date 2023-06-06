@@ -2,6 +2,7 @@
 
 @using MagicArchiver.Services
 @using MagicArchiver.Models
+@using FluentResults
 
 @inject NavigationManager Navigation
 @inject IGlobalState      GlobalState
@@ -84,6 +85,14 @@
         />
       </div>
     </div>
+    @if (error != null) {
+      <div
+        class = "alert alert-warning mt-3"
+        role  = "alert"
+      >
+        @error
+      </div>
+    }
   </div>
 </div>
 
@@ -92,6 +101,7 @@
   private string        cardId          = "";
   private AddCardMethod cardMethod      = AddCardMethod.SetNum;
   private bool          collapseNavMenu = false;
+  private string?       error           = null;
   
   private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -122,7 +132,13 @@
         Logger.LogError("ERROR: Not implemented yet");
         break;
       case AddCardMethod.SetAbr:
-        await PocketBase.AddCardBySetAbr(cardId, isFoil);
+        Result<Models.Collection> collection = await PocketBase.AddCardBySetAbr(cardId, isFoil);
+        if (collection.IsSuccess) {
+          Console.WriteLine(collection.Value.ToString());
+        }
+        else {
+          error = collection.Errors[0].ToString();
+        }
         break;
       case AddCardMethod.SetNum:
         Logger.LogError("ERROR: Not implemented yet");
@@ -149,7 +165,7 @@
   
   protected override void OnInitialized() {
     // Navigates the user to the login screen if they aren't authenticated
-    if (GlobalState.GetToken() == null) {
+    if (GlobalState.GetLoginDetails() == null) {
       Navigation.NavigateTo("login");
     }
   }

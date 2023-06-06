@@ -25,7 +25,7 @@
       class="@NavMenuCssClass collapse navbar-collapse"
       @onclick="ToggleNavMenu">
       <ul class="nav navbar-nav">
-        @if (GlobalState.GetToken() == null) {
+        @if (GlobalState.GetLoginDetails() == null) {
           <li class="nav-item">
             <NavLink class="nav-link" href="login">
               Login
@@ -73,7 +73,7 @@
   }
 
   private void Logout() {
-    GlobalState.ClearToken();
+    GlobalState.ClearLoginDetails();
     Navigation.NavigateTo("login");
   }
   

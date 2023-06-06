@@ -1,18 +1,16 @@
 ﻿namespace MagicArchiver.Models;
 
-public record struct LoginRecord {
+public record struct User {
   public string   id              { get; init; }
-  public string   collectionId    { get; init; }
-  public string   collectionName  { get; init; }
   public string   username        { get; init; }
   public bool     verfified       { get; init; }
   public bool     emailVisibility { get; init; }
-  public string   email           { get; init; }
+  public string?  email           { get; init; }
 }
 
-public record struct LoginResponse {
-  public string      token  { get; init; }
-  public LoginRecord record { get; init; }
+public record struct LoginDetails {
+  public string token  { get; init; }
+  public User   record { get; init; }
 }
 
 public record struct Page<T> {
@@ -21,13 +19,6 @@ public record struct Page<T> {
   public int totalPages { get; init; }
   public int totalItems { get; init; }
   public T[] items      { get; init; }
-}
-
-
-public record struct Collection {
-  public int    id       { get; init; }
-  public string uuid     { get; init; }
-  public int    quantity { get; init; }
 }
 
 public record struct Card {
@@ -170,4 +161,12 @@ public record struct Set {
   public string?   tokenSetCode     { get; init; }
   public int?      totalSetSize     { get; init; }
   public string?   type             { get; init; }
+}
+
+public record struct Collection {
+  public string id       { get; init; }
+  public string uuid     { get; init; }
+  public string userId   { get; init; }
+  public int    quantity { get; init; }
+  public bool   isFoil   { get; init; }
 }
