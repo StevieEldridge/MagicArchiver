@@ -14,18 +14,18 @@
 <div class="nav-scrollable sidebar py-4">
   <div class="nav-item my-2 px-3">
     <a
-      class    = "btn @(NavMenuActive(AddCardMethod.SetNum))"
-      @onclick = "@(() => cardMethod = AddCardMethod.SetNum)"
-    >
-      Set Number
-    </a>
-  </div>
-  <div class="nav-item my-2 px-3">
-    <a
       class    = "btn @(NavMenuActive(AddCardMethod.SetAbr))"
       @onclick = "@(() => cardMethod = AddCardMethod.SetAbr)"
     >
       Set Abbr
+    </a>
+  </div>
+  <div class="nav-item my-2 px-3">
+    <a
+      class    = "btn @(NavMenuActive(AddCardMethod.SetSize))"
+      @onclick = "@(() => cardMethod = AddCardMethod.SetSize)"
+    >
+      Set Size
     </a>
   </div>
   <div class="nav-item my-2 px-3">
@@ -60,7 +60,7 @@
       </p>
     }
     else {
-      <h2>Add By Total Set Number</h2>
+      <h2>Add By Set Size</h2>
       <p>
         Add a card by the set number followed by the total cards in the set. Example: to add Demonic
         Tutor from the Ultimate Masters set type "093254". Hit "Enter" to add the card or hit "Alt" to
@@ -99,7 +99,7 @@
 
 @code {
   private string        cardId          = "";
-  private AddCardMethod cardMethod      = AddCardMethod.SetNum;
+  private AddCardMethod cardMethod      = AddCardMethod.SetAbr;
   private bool          collapseNavMenu = false;
   private string?       error           = null;
   
@@ -129,19 +129,31 @@
   private async Task AddCard(bool isFoil) {
     switch (cardMethod) {
       case AddCardMethod.CardName:
-        Logger.LogError("ERROR: Not implemented yet");
-        break;
-      case AddCardMethod.SetAbr:
-        Result<Models.Collection> collection = await PocketBase.AddCardBySetAbr(cardId, isFoil);
-        if (collection.IsSuccess) {
-          Console.WriteLine(collection.Value.ToString());
+        Result<Models.Collection> nameResult = await PocketBase.AddCardByCardName(cardId, isFoil);
+        if (nameResult.IsSuccess) {
+          Console.WriteLine(nameResult.Value.ToString());
         }
         else {
-          error = collection.Errors[0].ToString();
+          error = nameResult.Errors[0].ToString();
         }
         break;
-      case AddCardMethod.SetNum:
-        Logger.LogError("ERROR: Not implemented yet");
+      case AddCardMethod.SetAbr:
+        Result<Models.Collection> abrResult = await PocketBase.AddCardBySetAbr(cardId, isFoil);
+        if (abrResult.IsSuccess) {
+          Console.WriteLine(abrResult.Value.ToString());
+        }
+        else {
+          error = abrResult.Errors[0].ToString();
+        }
+        break;
+      case AddCardMethod.SetSize:
+        Result<Models.Collection> sizeResult = await PocketBase.AddCardBySetSize(cardId, isFoil);
+        if (sizeResult.IsSuccess) {
+          Console.WriteLine(sizeResult.Value.ToString());
+        }
+        else {
+          error = sizeResult.Errors[0].ToString();
+        }
         break;
       default:
         Logger.LogError("ERROR: Default Triggered");
@@ -155,7 +167,7 @@
         return "093dem";
       case AddCardMethod.SetAbr:
         return "093uma";
-      case AddCardMethod.SetNum:
+      case AddCardMethod.SetSize:
         return "093254";
       default:
         Logger.LogError("ERROR: Default Triggered");

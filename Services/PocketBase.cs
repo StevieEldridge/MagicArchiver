@@ -196,15 +196,22 @@ public class PocketBase: IPocketBase {
 
 
   public async Task<Result<Collection>> AddCardBySetAbr(string cardId, bool isFoil) {
-    string setNum = cardId.Substring(0, 3);
-    setNum = int.Parse(setNum).ToString();
-    string setAbr = cardId.Substring(3, 3).ToUpper();
+    string setNum = "";
+    string setAbr = "";
+    
+    try {
+      setNum = cardId.Substring(0, 3);
+      setNum = int.Parse(setNum).ToString();
+      setAbr = cardId.Substring(3, 3).ToUpper();
+    }
+    catch (Exception e) {
+      return Result.Fail(new Error("The id string is invalid"));
+    }
 
     Result<Page<Card>> cards = await GetCollectionRecords<Card>(
       $"number = '{setNum}' && setCode = '{setAbr}'", 
       "cards"
     );
-
 
     return await cards
       .Bind(c =>
@@ -221,4 +228,76 @@ public class PocketBase: IPocketBase {
           : UpdateCollectionQuantity(collection.items[0])
       );
   }
+  
+  
+  public async Task<Result<Collection>> AddCardBySetSize(string cardId, bool isFoil) {
+    string setNum  = "";
+    string setSize = "";
+    
+    try {
+      setNum = cardId.Substring(0, 3);
+      setNum = int.Parse(setNum).ToString();
+      setSize = cardId.Substring(3, 3);
+      setSize = int.Parse(setSize).ToString();
+    }
+    catch (Exception e) {
+      return Result.Fail(new Error("The id string is invalid"));
+    }
+    
+
+    Result<Page<CardSet>> cards = await GetCollectionRecords<CardSet>(
+      $"number = '{setNum}' && baseSetSize = '{setSize}'", 
+      "card_sets"
+    );
+
+    return await cards
+      .Bind(c =>
+        c.items.Length == 1
+          ? Result.Ok(c)
+          : Result.Fail(new Error("Id string matched more than 1 card"))
+      )
+      .Bind(c =>
+        GetCardInCollection(c.items[0].uuid, isFoil)
+      )
+      .Bind(collection =>
+        collection.items.Length == 0
+          ? AddCardToCollection(cards.Value.items[0].uuid, isFoil)
+          : UpdateCollectionQuantity(collection.items[0])
+      );
+  }
+  
+  
+  public async Task<Result<Collection>> AddCardByCardName(string cardId, bool isFoil) {
+    string setNum   = "";
+    string cardName = "";
+    
+    try {
+      setNum = cardId.Substring(0, 3);
+      setNum = int.Parse(setNum).ToString();
+      cardName = cardId.Substring(3, 3);
+    }
+    catch (Exception e) {
+      return Result.Fail(new Error("The id string is invalid"));
+    }
+
+    Result<Page<Card>> cards = await GetCollectionRecords<Card>(
+      $"number = '{setNum}' && name ~ '{cardName}%'", 
+      "cards"
+    );
+
+   return await cards
+     .Bind(c =>
+       c.items.Length == 1
+         ? Result.Ok(c)
+         : Result.Fail(new Error("Id string matched more than 1 card"))
+     )
+     .Bind(c =>
+       GetCardInCollection(c.items[0].uuid, isFoil)
+     )
+     .Bind(collection =>
+       collection.items.Length == 0
+         ? AddCardToCollection(cards.Value.items[0].uuid, isFoil)
+         : UpdateCollectionQuantity(collection.items[0])
+     );
+ }
 }

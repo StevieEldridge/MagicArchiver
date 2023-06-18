@@ -170,3 +170,12 @@ public record struct Collection {
   public int    quantity { get; init; }
   public bool   isFoil   { get; init; }
 }
+
+
+public struct CardSet {
+  public string id;
+  public string uuid;
+  public string number;
+  public int    baseSetSize;
+  public string setCode;
+}
