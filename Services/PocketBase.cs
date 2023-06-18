@@ -230,6 +230,7 @@ public class PocketBase: IPocketBase {
   }
   
   
+  // TODO: Add handling for multiple matched cards with the cardId
   public async Task<Result<Collection>> AddCardBySetSize(string cardId, bool isFoil) {
     string setNum  = "";
     string setSize = "";
@@ -267,6 +268,7 @@ public class PocketBase: IPocketBase {
   }
   
   
+  // TODO: Add handling for multiple matched cards with the cardId
   public async Task<Result<Collection>> AddCardByCardName(string cardId, bool isFoil) {
     string setNum   = "";
     string cardName = "";
